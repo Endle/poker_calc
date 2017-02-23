@@ -1,0 +1,6 @@
+[submodule "deuces"]
+	path = deuces
+	url = git@github.com:Endle/deuces.git
+[submodule "pymontecarlo"]
+	path = pymontecarlo
+	url = git@github.com:Endle/pymontecarlo.git
