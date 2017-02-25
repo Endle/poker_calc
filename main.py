@@ -9,6 +9,7 @@ def generate_set():
     l = (Card.new(b+a) for a in suit for b in rank)
     return l
 
+
 def main():
     deck = list(generate_set())
     hand = deck[5:7]
@@ -16,13 +17,18 @@ def main():
     public_situations = tuple(combinations(deck, 5))
     evaluator = Evaluator()
     ret = dict()
+    def calculate_rank(board:tuple, hand)->int:
+        total = hand + list(board)
+        score = evaluator._seven(total)
+        rank = evaluator.get_rank_class(score)
+        return rank
+
     for i in range(1,10):
         ret[i] = 0
     total_games = 0
     for i in public_situations:
-        board = list(i)
-        score = evaluator.evaluate(board, hand)
-        rank = evaluator.get_rank_class(score)
+        board = tuple(i)
+        rank = calculate_rank(board, hand)
         ret[rank] += 1
         total_games += 1
 
