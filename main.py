@@ -17,8 +17,8 @@ def main():
     public_situations = tuple(combinations(deck, 5))
     evaluator = Evaluator()
     ret = dict()
-    def calculate_rank(board:tuple, hand)->int:
-        total = hand + list(board)
+    def calculate_rank(board:list, hand)->int:
+        total = hand + board
         score = evaluator._seven(total)
         rank = evaluator.get_rank_class(score)
         return rank
@@ -27,7 +27,7 @@ def main():
         ret[i] = 0
     total_games = 0
     for i in public_situations:
-        board = tuple(i)
+        board = list(i)
         rank = calculate_rank(board, hand)
         ret[rank] += 1
         total_games += 1
