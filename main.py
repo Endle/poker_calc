@@ -16,21 +16,21 @@ def main():
     deck = list(generate_set())
     hand = deck[5:7]
     deck = tuple(deck[:5] + deck[7:])
-    public_situations = tuple(combinations(deck, 5))
+    public_situations = combinations(deck, 5)
     evaluator = Evaluator()
     ret = dict()
     def _calculate_rank(board, hand)->int:
-        total = hand + list(board)
+        total = list(hand) + list(board)
         score = evaluator._seven(total)
         rank = evaluator.get_rank_class(score)
         return rank
     calculate_rank = partial(_calculate_rank, hand=hand)
 
-    total_games = len(public_situations)
-
     ret = collections.Counter(map(calculate_rank, public_situations))
-    for i in range(1, 9):
-        pr = "{0}: {1} times, {2}%".format(evaluator.class_to_string(i), ret[i], ret[i]/total_games*100.0)
+
+    total_games = sum(ret.values())
+    for i in range(1, 10):
+        pr = "{0:16s}: {1:6d} times, {2:.2f}%".format(evaluator.class_to_string(i), ret[i], ret[i]/total_games*100.0)
         print(pr)
 
 main()
