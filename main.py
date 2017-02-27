@@ -2,6 +2,8 @@ from deuces.deuces.card import Card
 from deuces.deuces.evaluator import Evaluator
 from deuces.deuces.lookup import LookupTable
 from itertools import combinations
+from functools import partial
+import collections
 
 def generate_set():
     suit = "shdc"
@@ -17,23 +19,18 @@ def main():
     public_situations = tuple(combinations(deck, 5))
     evaluator = Evaluator()
     ret = dict()
-    def calculate_rank(board:list, hand)->int:
-        total = hand + board
+    def _calculate_rank(board, hand)->int:
+        total = hand + list(board)
         score = evaluator._seven(total)
         rank = evaluator.get_rank_class(score)
         return rank
+    calculate_rank = partial(_calculate_rank, hand=hand)
 
-    for i in range(1,10):
-        ret[i] = 0
-    total_games = 0
-    for i in public_situations:
-        board = list(i)
-        rank = calculate_rank(board, hand)
-        ret[rank] += 1
-        total_games += 1
+    total_games = len(public_situations)
 
-    for k,v in ret.items():
-        pr = "{0}: {1} times, {2}%".format(evaluator.class_to_string(k), v, v/total_games*100.0)
+    ret = collections.Counter(map(calculate_rank, public_situations))
+    for i in range(1, 9):
+        pr = "{0}: {1} times, {2}%".format(evaluator.class_to_string(i), ret[i], ret[i]/total_games*100.0)
         print(pr)
 
 main()
