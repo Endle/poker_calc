@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from deuces.deuces.card import Card
 from deuces.deuces.evaluator import Evaluator
 from deuces.deuces.lookup import LookupTable
